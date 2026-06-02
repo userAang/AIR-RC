@@ -14,8 +14,8 @@ export function generateStaticParams() {
   return months.map((m) => ({ mois: m.id }));
 }
 
-export default async function MoisPage(props: Readonly<{ params: Readonly<{ mois: string }> }>) {
-  const { mois } = props.params;
+export default async function MoisPage(props: Readonly<{ params: Promise<Readonly<{ mois: string }>> }>) {
+  const { mois } = await props.params;
   const month = getMonth(mois);
   if (!month) notFound();
 
