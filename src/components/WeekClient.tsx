@@ -65,8 +65,9 @@ export function WeekClient({ month, week }: Props) {
     setError(null);
 
     // Validation : champs identité
-    if (!identity.fullName.trim()) {
-      setError("Merci de renseigner ton nom complet.");
+    const letterCount = (identity.fullName.match(/[A-Za-zÀ-ÖØ-öø-ÿ]/g) || []).length;
+    if (letterCount < 3) {
+      setError("Nom ou Prenom");
       return;
     }
     // Validation : toutes les questions répondues
