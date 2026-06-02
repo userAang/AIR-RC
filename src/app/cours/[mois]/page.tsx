@@ -3,24 +3,24 @@ import Link from "next/link";
 import { months, getMonth } from "@/data/months";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { ArrowRight, Calendar, BookOpen } from "lucide-react";
+import { ArrowRight, Calendar } from "lucide-react";
 
 // Filtre d'accès temporaire : ne permettre que certains mois.
 // Pour désactiver le blocage, modifie simplement le tableau `ALLOWED_MONTHS`
 // ci-dessous (par ex. supprime l'entrée 'juin-2026' ou ajoute d'autres ids), puis redeploie.
-const ALLOWED_MONTHS = ["juin-2026", "juillet-2026", "aout-2026"];
+const ALLOWED_MONTHS = new Set(["juin-2026"]);
 
 export function generateStaticParams() {
   return months.map((m) => ({ mois: m.id }));
 }
 
-export default async function MoisPage({ params }: { params: { mois: string } }) {
-  const { mois } = (await params) as { mois: string };
+export default async function MoisPage(props: Readonly<{ params: Readonly<{ mois: string }> }>) {
+  const { mois } = props.params;
   const month = getMonth(mois);
   if (!month) notFound();
 
   // Bloquer l'accès aux mois non autorisés
-  if (!ALLOWED_MONTHS.includes(month.id)) {
+  if (!ALLOWED_MONTHS.has(month.id)) {
     return (
       <>
         <SiteHeader />

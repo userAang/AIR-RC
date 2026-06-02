@@ -9,19 +9,17 @@ import {
   ChevronRight,
   FlaskConical,
   Send,
-  CheckCircle2,
   XCircle,
   Loader2,
   Copy,
   Check,
-  Mail,
   Trophy,
 } from "lucide-react";
 
-type Props = {
+type Props = Readonly<{
   month: MonthCourse;
   week: Week;
-};
+}>;
 
 type ResultData = {
   score: number;
@@ -124,7 +122,7 @@ export function WeekClient({ month, week }: Props) {
     const percentage = Math.round((result.score / result.total) * 100);
     const success = percentage >= 70;
     return (
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <div className="rounded-2xl bg-air-surface border border-air-border p-8 text-center">
           <div
             className={`w-20 h-20 rounded-full mx-auto flex items-center justify-center ${
@@ -171,7 +169,7 @@ export function WeekClient({ month, week }: Props) {
                       : "bg-amber-50 border-amber-200"
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="text-sm font-medium text-air-text">Question {index + 1}</div>
                     <div className={`text-xs uppercase font-semibold ${item.isCorrect ? "text-emerald-600" : "text-amber-700"}`}>
                       {item.isCorrect ? "Correct" : "Incorrect"}
@@ -224,7 +222,7 @@ export function WeekClient({ month, week }: Props) {
     <>
       {/* PROGRESSION */}
       {step === "lessons" && (
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 mt-2">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mt-2">
           <div className="flex items-center justify-between text-xs text-air-muted font-mono uppercase tracking-widest mb-3">
             <span>
               Leçon {lessonIdx + 1} / {week.lessons.length}
@@ -242,7 +240,7 @@ export function WeekClient({ month, week }: Props) {
 
       {/* LEÇON COURANTE */}
       {step === "lessons" && (
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <div className="rounded-2xl bg-air-surface border border-air-border p-6 sm:p-8">
             <div className="text-xs uppercase tracking-widest text-air-cyan/80 font-mono">
               {lesson.theme}
@@ -255,14 +253,14 @@ export function WeekClient({ month, week }: Props) {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-between">
+          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <button
               onClick={() => {
                 setLessonIdx((i) => Math.max(0, i - 1));
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               disabled={lessonIdx === 0}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-air-surface border border-air-border hover:border-air-cyan disabled:opacity-40 disabled:cursor-not-allowed text-air-text text-sm transition"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-air-surface border border-air-border hover:border-air-cyan disabled:opacity-40 disabled:cursor-not-allowed text-air-text text-sm transition"
             >
               <ChevronLeft className="w-4 h-4" /> Précédent
             </button>
@@ -273,7 +271,7 @@ export function WeekClient({ month, week }: Props) {
                   setStep("quiz");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-air-cyan text-air-bg font-medium hover:bg-air-cyan/90 transition btn-glow text-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-air-cyan text-air-bg font-medium hover:bg-air-cyan/90 transition btn-glow text-sm"
               >
                 Passer au QCM <ChevronRight className="w-4 h-4" />
               </button>
@@ -283,7 +281,7 @@ export function WeekClient({ month, week }: Props) {
                   setLessonIdx((i) => Math.min(week.lessons.length - 1, i + 1));
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-air-cyan text-air-bg font-medium hover:bg-air-cyan/90 transition btn-glow text-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-air-cyan text-air-bg font-medium hover:bg-air-cyan/90 transition btn-glow text-sm"
               >
                 Leçon suivante <ChevronRight className="w-4 h-4" />
               </button>
@@ -294,7 +292,7 @@ export function WeekClient({ month, week }: Props) {
 
       {/* QCM */}
       {step === "quiz" && (
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <div className="rounded-2xl bg-air-surface border border-air-border p-6 sm:p-8">
             <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-air-cyan font-mono">
               <BookOpen className="w-3.5 h-3.5" /> Validation des acquis
@@ -323,7 +321,7 @@ export function WeekClient({ month, week }: Props) {
                         const checked = sel.includes(i);
                         return (
                           <label
-                            key={i}
+                            key={`${q.id}-${i}`}
                             className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition ${
                               checked
                                 ? "bg-air-cyan/10 border-air-cyan/50"
@@ -370,21 +368,21 @@ export function WeekClient({ month, week }: Props) {
               </div>
             )}
 
-            <div className="mt-8 flex items-center justify-between flex-wrap gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <button
                 onClick={() => {
                   setStep("lessons");
                   setLessonIdx(week.lessons.length - 1);
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-air-surface border border-air-border hover:border-air-cyan text-air-text text-sm transition"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-air-surface border border-air-border hover:border-air-cyan text-air-text text-sm transition"
               >
                 <ChevronLeft className="w-4 h-4" /> Revoir les leçons
               </button>
               <button
                 onClick={submit}
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-air-cyan text-air-bg font-medium hover:bg-air-cyan/90 disabled:opacity-60 transition btn-glow"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-air-cyan text-air-bg font-medium hover:bg-air-cyan/90 disabled:opacity-60 transition btn-glow"
               >
                 {submitting ? (
                   <>
@@ -410,13 +408,13 @@ function MiniProjectBlock({
   week,
   onCopy,
   copied,
-}: {
+}: Readonly<{
   week: Week;
   onCopy: () => void;
   copied: boolean;
-}) {
+}>) {
   return (
-    <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-16 pt-4">
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-16 pt-4">
       <div className="rounded-2xl bg-gradient-to-br from-air-card to-air-surface border border-air-cyan/30 p-6 sm:p-8 relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-40 h-40 bg-air-cyan/10 rounded-full blur-3xl" />
 

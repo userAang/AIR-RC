@@ -115,8 +115,14 @@ body {
 
 .markdown-content table {
   border-collapse: collapse;
-  margin: 1rem 0;
   width: 100%;
+  min-width: 640px;
+}
+
+.markdown-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1rem 0;
 }
 
 .markdown-content th,
@@ -124,6 +130,7 @@ body {
   border: 1px solid #E5E7EB;
   padding: 0.5rem 0.75rem;
   text-align: left;
+  word-break: break-word;
 }
 
 .markdown-content th {

@@ -45,7 +45,7 @@ export function renderMarkdown(md: string): string {
   const flushTable = () => {
     if (inTable && tableRows.length > 0) {
       const [header, _sep, ...body] = tableRows;
-      out.push("<table>");
+      out.push('<div class="markdown-table-scroll"><table>');
       if (header) {
         out.push("<thead><tr>");
         for (const cell of header) out.push(`<th>${processInline(cell.trim())}</th>`);
@@ -60,7 +60,7 @@ export function renderMarkdown(md: string): string {
         }
         out.push("</tbody>");
       }
-      out.push("</table>");
+      out.push("</table></div>");
       inTable = false;
       tableRows = [];
     }
@@ -162,7 +162,7 @@ export function renderMarkdown(md: string): string {
   return out.join("\n");
 }
 
-export function Markdown({ source }: { source: string }) {
+export function Markdown({ source }: Readonly<{ source: string }>) {
   const html = renderMarkdown(source);
   return <div className="markdown-content" dangerouslySetInnerHTML={{ __html: html }} />;
 }
