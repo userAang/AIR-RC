@@ -22,7 +22,7 @@ export default async function SemainePage({
 
       <section className="relative">
         <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-3xl opacity-15 bg-air-cyan/20" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[320px] sm:w-[500px] sm:h-[500px] rounded-full blur-3xl opacity-15 bg-air-cyan/20" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-8 pb-2">
           <Breadcrumb

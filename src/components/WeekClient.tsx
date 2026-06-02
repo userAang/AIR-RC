@@ -28,6 +28,9 @@ type ResultData = {
   total: number;
   details: Array<{
     questionId: string;
+    question: string;
+    options: string[];
+    explanation: string;
     isCorrect: boolean;
     correctAnswers: number[];
     userAnswers: number[];
@@ -38,7 +41,7 @@ export function WeekClient({ month, week }: Props) {
   const [step, setStep] = useState<"lessons" | "quiz" | "submitted">("lessons");
   const [lessonIdx, setLessonIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number[]>>({});
-  const [identity, setIdentity] = useState({ nom: "", prenom: "", telephone: "", email: "" });
+  const [identity, setIdentity] = useState({ fullName: "" });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ResultData | null>(null);
@@ -64,12 +67,8 @@ export function WeekClient({ month, week }: Props) {
     setError(null);
 
     // Validation : champs identité
-    if (!identity.nom.trim() || !identity.prenom.trim() || !identity.email.trim() || !identity.telephone.trim()) {
-      setError("Merci de remplir tous les champs (nom, prénom, téléphone, email).");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identity.email.trim())) {
-      setError("Adresse email invalide.");
+    if (!identity.fullName.trim()) {
+      setError("Merci de renseigner ton nom complet.");
       return;
     }
     // Validation : toutes les questions répondues
@@ -147,14 +146,50 @@ export function WeekClient({ month, week }: Props) {
           </div>
 
           <div className="mt-8 p-4 rounded-xl bg-air-card border border-air-border text-left">
-            <div className="flex items-center gap-2 text-air-cyan font-medium text-sm">
-              <Mail className="w-4 h-4" /> Email de confirmation envoyé
+            <div className="text-sm text-air-muted">
+              Voici ton résultat détaillé. Les questions correctes et incorrectes sont listées
+              ci-dessous pour t'aider à revoir les notions où des erreurs ont été commises.
             </div>
-            <div className="text-sm text-air-muted mt-2">
-              Une copie de tes réponses, le corrigé et les explications ont été envoyés à{" "}
-              <span className="text-air-text">{identity.email}</span>. Pense à vérifier tes spams si
-              tu ne le vois pas. Une notification a aussi été transmise au chef de pôle.
-            </div>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            {result.details.map((item, index) => {
+              const userTexts =
+                item.userAnswers.length > 0
+                  ? item.userAnswers.map((idx) => item.options[idx] ?? "?").join(" / ")
+                  : "Aucune réponse";
+              const correctTexts = item.correctAnswers
+                .map((idx) => item.options[idx] ?? "?")
+                .join(" / ");
+
+              return (
+                <div
+                  key={item.questionId}
+                  className={`rounded-2xl border p-5 ${
+                    item.isCorrect
+                      ? "bg-emerald-50 border-emerald-200"
+                      : "bg-amber-50 border-amber-200"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm font-medium text-air-text">Question {index + 1}</div>
+                    <div className={`text-xs uppercase font-semibold ${item.isCorrect ? "text-emerald-600" : "text-amber-700"}`}>
+                      {item.isCorrect ? "Correct" : "Incorrect"}
+                    </div>
+                  </div>
+                  <div className="mt-3 text-sm text-air-text font-semibold">{item.question}</div>
+                  <div className="mt-3 text-sm text-air-muted">
+                    <div>
+                      <span className="font-medium text-air-text">Ta réponse :</span> {userTexts}
+                    </div>
+                    <div className="mt-2">
+                      <span className="font-medium text-air-text">Bonne réponse :</span> {correctTexts}
+                    </div>
+                  </div>
+                  <div className="mt-3 text-sm text-air-muted">💡 {item.explanation}</div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="mt-6 grid sm:grid-cols-2 gap-3 text-left">
@@ -268,8 +303,7 @@ export function WeekClient({ month, week }: Props) {
               QCM — Semaine {week.number}
             </h2>
             <p className="text-air-muted text-sm mt-2">
-              Réponds à toutes les questions. Renseigne ton identité, puis envoie. Tu recevras les
-              corrections par email immédiatement.
+              Réponds à toutes les questions puis clique sur Voir le résultat pour consulter ton score.
             </p>
 
             <div className="mt-8 space-y-6">
@@ -315,38 +349,17 @@ export function WeekClient({ month, week }: Props) {
 
             {/* IDENTITÉ */}
             <div className="mt-10 pt-6 border-t border-air-border">
-              <h3 className="font-display font-semibold text-lg text-air-text">Tes informations</h3>
+              <h3 className="font-display font-semibold text-lg text-air-text">Ton identité</h3>
               <p className="text-air-muted text-xs mt-1">
-                Pour la transmission de tes réponses au chef de pôle et l'envoi de tes corrections.
+                Renseigne ton nom complet pour valider le QCM et voir ton résultat.
               </p>
-              <div className="mt-5 grid sm:grid-cols-2 gap-3">
+              <div className="mt-5">
                 <input
                   type="text"
-                  placeholder="Nom"
-                  value={identity.nom}
-                  onChange={(e) => setIdentity({ ...identity, nom: e.target.value })}
-                  className="px-4 py-2.5 rounded-lg bg-air-card border border-air-border text-air-text text-sm focus:border-air-cyan outline-none"
-                />
-                <input
-                  type="text"
-                  placeholder="Prénom"
-                  value={identity.prenom}
-                  onChange={(e) => setIdentity({ ...identity, prenom: e.target.value })}
-                  className="px-4 py-2.5 rounded-lg bg-air-card border border-air-border text-air-text text-sm focus:border-air-cyan outline-none"
-                />
-                <input
-                  type="tel"
-                  placeholder="Numéro de téléphone"
-                  value={identity.telephone}
-                  onChange={(e) => setIdentity({ ...identity, telephone: e.target.value })}
-                  className="px-4 py-2.5 rounded-lg bg-air-card border border-air-border text-air-text text-sm focus:border-air-cyan outline-none"
-                />
-                <input
-                  type="email"
-                  placeholder="Adresse email"
-                  value={identity.email}
-                  onChange={(e) => setIdentity({ ...identity, email: e.target.value })}
-                  className="px-4 py-2.5 rounded-lg bg-air-card border border-air-border text-air-text text-sm focus:border-air-cyan outline-none"
+                  placeholder="Nom complet"
+                  value={identity.fullName}
+                  onChange={(e) => setIdentity({ fullName: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-lg bg-air-card border border-air-border text-air-text text-sm focus:border-air-cyan outline-none"
                 />
               </div>
             </div>
@@ -375,11 +388,11 @@ export function WeekClient({ month, week }: Props) {
               >
                 {submitting ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" /> Envoi en cours...
+                    <Loader2 className="w-4 h-4 animate-spin" /> Vérification en cours...
                   </>
                 ) : (
                   <>
-                    Envoyer mes réponses <Send className="w-4 h-4" />
+                    Voir le résultat <Send className="w-4 h-4" />
                   </>
                 )}
               </button>
@@ -388,8 +401,7 @@ export function WeekClient({ month, week }: Props) {
         </section>
       )}
 
-      {/* MINI-PROJET (toujours visible) */}
-      {step !== "submitted" && <MiniProjectBlock week={week} onCopy={copyTemplate} copied={copied} />}
+      {/* MINI-PROJET : affiché uniquement après soumission du QCM */}
     </>
   );
 }

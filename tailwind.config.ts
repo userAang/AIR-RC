@@ -10,15 +10,15 @@ const config: Config = {
     extend: {
       colors: {
         air: {
-          bg: "#05080F",
-          surface: "#0B1220",
-          card: "#0F1A2E",
-          border: "#1B2A47",
-          cyan: "#22D3EE",
-          blue: "#3B82F6",
-          accent: "#38BDF8",
-          text: "#E2E8F0",
-          muted: "#94A3B8",
+          bg: "#F8FAFB",
+          surface: "#FFFFFF",
+          card: "#F1F5F9",
+          border: "#E2E8F0",
+          cyan: "#06B6D4",
+          blue: "#2563EB",
+          accent: "#0EA5E9",
+          text: "#0F172A",
+          muted: "#475569",
         },
       },
       fontFamily: {

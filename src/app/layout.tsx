@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { AnalyticsClient } from "@/components/analytics-client";
+import { SpeedInsightsClient } from "@/components/speed-insights-client";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -32,7 +34,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <body suppressHydrationWarning className="min-h-screen bg-air-bg text-air-text antialiased">{children}</body>
+      <body suppressHydrationWarning className="min-h-screen bg-air-bg text-air-text antialiased">
+        {children}
+        <AnalyticsClient />
+        <SpeedInsightsClient />
+      </body>
     </html>
   );
 }

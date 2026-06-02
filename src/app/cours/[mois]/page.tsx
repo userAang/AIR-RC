@@ -5,6 +5,11 @@ import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ArrowRight, Calendar, BookOpen } from "lucide-react";
 
+// Filtre d'accès temporaire : ne permettre que certains mois.
+// Pour désactiver le blocage, modifie simplement le tableau `ALLOWED_MONTHS`
+// ci-dessous (par ex. supprime l'entrée 'juin-2026' ou ajoute d'autres ids), puis redeploie.
+const ALLOWED_MONTHS = ["juin-2026", "juillet-2026", "aout-2026"];
+
 export function generateStaticParams() {
   return months.map((m) => ({ mois: m.id }));
 }
@@ -14,13 +19,27 @@ export default async function MoisPage({ params }: { params: { mois: string } })
   const month = getMonth(mois);
   if (!month) notFound();
 
+  // Bloquer l'accès aux mois non autorisés
+  if (!ALLOWED_MONTHS.includes(month.id)) {
+    return (
+      <>
+        <SiteHeader />
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 py-20 text-center">
+          <h1 className="text-3xl font-display font-bold text-air-text mb-4">Boss, j'ai bloqué l'accès haha</h1>
+          <p className="text-air-muted">Le contenu de ce mois est temporairement restreint — si tu as tout terminé, envoie un mail et je te débloque la suite !</p>
+        </main>
+        <SiteFooter />
+      </>
+    );
+  }
+
   return (
     <>
       <SiteHeader />
 
       <section className="relative">
         <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-air-cyan/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] h-[320px] sm:w-[500px] sm:h-[500px] bg-air-cyan/5 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <Breadcrumb items={[{ label: "Accueil", href: "/" }, { label: month.label }]} />

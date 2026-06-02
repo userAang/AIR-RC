@@ -1,11 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Menu, X } from "lucide-react";
 
 export function SiteHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-air-bg/70 border-b border-air-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" className="flex items-center gap-3 group" onClick={() => setMenuOpen(false)}>
           <div className="relative w-10 h-10 bg-white rounded-lg p-1 group-hover:scale-105 transition-transform">
             <Image src="/logo.png" alt="AIR" fill className="object-contain" sizes="40px" />
           </div>
@@ -29,7 +35,43 @@ export function SiteHeader() {
             À propos
           </Link>
         </nav>
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          className="sm:hidden inline-flex items-center justify-center rounded-full p-2 text-air-muted hover:text-air-cyan border border-air-border bg-air-surface/80"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
+      {menuOpen && (
+        <div className="sm:hidden border-t border-air-border bg-air-bg/95 px-4 pb-4">
+          <nav className="flex flex-col gap-2 pt-4">
+            <Link
+              href="/"
+              className="block rounded-2xl px-4 py-3 text-air-text hover:bg-air-surface transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Accueil
+            </Link>
+            <Link
+              href="/#cours"
+              className="block rounded-2xl px-4 py-3 text-air-text hover:bg-air-surface transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              Cours
+            </Link>
+            <Link
+              href="/#about"
+              className="block rounded-2xl px-4 py-3 text-air-text hover:bg-air-surface transition"
+              onClick={() => setMenuOpen(false)}
+            >
+              À propos
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

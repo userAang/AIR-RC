@@ -15,12 +15,12 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-air-bg/50 to-air-bg" />
 
         {/* Halo cyan */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-air-cyan/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] bg-air-cyan/10 rounded-full blur-3xl" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
           <div className="flex flex-col items-center text-center">
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 mb-8 bg-white rounded-2xl p-3 glow-cyan-strong animate-glow-pulse">
-              <Image src="/logo.png" alt="AIR Logo" fill className="object-contain p-2" priority />
+              <Image src="/logo.png" alt="AIR Logo" fill className="object-contain p-2" sizes="(max-width: 640px) 112px, 144px" priority />
             </div>
 
             <div className="text-xs sm:text-sm uppercase tracking-[0.3em] text-air-cyan/80 mb-4 font-mono">
@@ -34,9 +34,9 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-air-muted text-base sm:text-lg leading-relaxed">
-              Une plateforme dédiée à la formation des membres du club AIR. Sept mois de cours
-              progressifs, du fondamental informatique jusqu'au pentest avancé. Apprends à ton
-              rythme, valide tes acquis, livre des mini-projets.
+              Une plateforme dédiée à la formation des membres du club AIR. Contenus orientés
+              informatique, réseaux et cybersécurité pour progresser de la théorie aux projets
+              pratiques, au rythme du club.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-sm">
@@ -67,14 +67,15 @@ export default function HomePage() {
           <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
             <div>
               <div className="text-xs uppercase tracking-widest text-air-cyan font-mono mb-2">
-                Programme 2026
+                Club Tech
               </div>
               <h2 className="font-display font-bold text-3xl sm:text-4xl text-air-text">
                 Cours par mois
               </h2>
               <p className="text-air-muted mt-2 max-w-xl">
-                De juin à décembre 2026. Chaque mois explore une thématique unique. Chaque
-                mois contient quatre semaines de contenu progressif, avec un QCM et un mini-projet.
+                Contenus évolutifs construits pour accompagner les membres du pôle Cyber.
+                Chaque mois explore une thématique, avec un parcours de notions, un QCM et un
+                mini-projet pratique.
               </p>
             </div>
           </div>
@@ -146,15 +147,14 @@ export default function HomePage() {
                 ASEBEM Innovation and Research
               </h2>
               <p className="text-air-muted mt-4 leading-relaxed">
-                AIR est un club tech regroupant plusieurs pôles. Ce site est dédié au pôle{" "}
-                <span className="text-air-cyan font-medium">Réseaux & Cybersécurité</span>. Notre
-                mission : transmettre les compétences clés du domaine, du débutant complet à
-                l'autonome qui peut faire du pentest dans un lab.
+                AIR Club, ou ASEBEM Innovation Research Club, est un club créé par des
+                étudiants et stagiaires béninois au Maroc. Ce site est destiné à tous ceux qui
+                souhaitent apprendre et comprendre le monde des réseaux et de la cybersécurité.
               </p>
               <p className="text-air-muted mt-4 leading-relaxed">
-                Le programme est conçu pour être progressif et cohérent. On commence par
-                l'informatique de base en juin, on enchaîne sur l'administration système, puis les
-                réseaux, la défense, l'offensive, et on termine par un CTF interne en décembre.
+                Le contenu reste ouvert et évolutif : on couvre l'informatique, les réseaux,
+                la défense, l'offensive et les bonnes pratiques, tout en enrichissant le parcours
+                avec de nouveaux modules.
               </p>
             </div>
             <div className="bg-air-card border border-air-border rounded-2xl p-6 space-y-4">
@@ -163,9 +163,9 @@ export default function HomePage() {
                   <Cpu className="w-5 h-5 text-air-cyan" />
                 </div>
                 <div>
-                  <div className="font-display font-semibold text-air-text">7 mois de cours</div>
+                  <div className="font-display font-semibold text-air-text">Contenu évolutif</div>
                   <div className="text-sm text-air-muted">
-                    Juin à décembre 2026, contenus progressifs.
+                    Un catalogue qui s'enrichit au fur et à mesure du parcours du club.
                   </div>
                 </div>
               </div>

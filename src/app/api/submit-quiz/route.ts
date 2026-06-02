@@ -4,7 +4,6 @@ import { getMonth, getWeek } from "@/data/months";
 import {
   gradeQuiz,
   buildAdminEmail,
-  buildStudentEmail,
   type SubmissionIdentity,
   type SubmissionAnswers,
 } from "@/lib/quiz";
@@ -18,10 +17,6 @@ interface Payload {
   answers: SubmissionAnswers;
 }
 
-function isValidEmail(s: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
-}
-
 export async function POST(req: Request) {
   let body: Payload;
   try {
@@ -33,14 +28,7 @@ export async function POST(req: Request) {
   const { identity, monthId, weekId, answers } = body || ({} as Payload);
 
   // Validation
-  if (
-    !identity ||
-    !identity.nom?.trim() ||
-    !identity.prenom?.trim() ||
-    !identity.telephone?.trim() ||
-    !identity.email?.trim() ||
-    !isValidEmail(identity.email)
-  ) {
+  if (!identity || !identity.fullName?.trim()) {
     return NextResponse.json({ error: "Identité invalide" }, { status: 400 });
   }
 
@@ -61,24 +49,13 @@ export async function POST(req: Request) {
     try {
       const resend = new Resend(apiKey);
       const adminMail = buildAdminEmail({ identity, month, week, result });
-      const studentMail = buildStudentEmail({ identity, month, week, result });
 
-      await Promise.all([
-        resend.emails.send({
-          from: fromEmail,
-          to: [adminEmail],
-          replyTo: identity.email,
-          subject: adminMail.subject,
-          html: adminMail.html,
-        }),
-        resend.emails.send({
-          from: fromEmail,
-          to: [identity.email],
-          replyTo: adminEmail,
-          subject: studentMail.subject,
-          html: studentMail.html,
-        }),
-      ]);
+      await resend.emails.send({
+        from: fromEmail,
+        to: [adminEmail],
+        subject: adminMail.subject,
+        html: adminMail.html,
+      });
     } catch (e: any) {
       // L'évaluation reste affichée à l'élève même si l'email plante,
       // mais on log pour le dev.
@@ -95,6 +72,9 @@ export async function POST(req: Request) {
     total: result.total,
     details: result.details.map((d) => ({
       questionId: d.questionId,
+      question: d.question,
+      options: d.options,
+      explanation: d.explanation,
       isCorrect: d.isCorrect,
       correctAnswers: d.correctAnswers,
       userAnswers: d.userAnswers,
